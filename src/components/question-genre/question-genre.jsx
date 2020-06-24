@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import PropTypes from "prop-types";
 import {GameType} from "../../const";
 
 const QuestionGenre = (props) => {
   const {onAnswer, question} = props;
   const {genre} = question;
-  const [answers, setAnswers] = useState([false, false, false, false]);
+  const userAnswers = [false, false, false, false];
+  const [answers, setAnswers] = useState(userAnswers);
+
+  const getAnswers = (evt, i) => {
+    const value = evt.target.checked;
+
+    setAnswers([...userAnswers.slice(0, i), value, ...userAnswers.slice(i + 1)]);
+  };
 
   return (
     <section className="game game--genre">
@@ -17,7 +24,7 @@ const QuestionGenre = (props) => {
 
         <svg xmlns="http://www.w3.org/2000/svg" className="timer" viewBox="0 0 780 780">
           <circle className="timer__line" cx="390" cy="390" r="370"
-            style="filter: url(#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center"/>
+            style={{filter: `url(#blur)`, transform: `rotate(-90deg) scaleY(-1)`, transformOrigin: `center`}}/>
         </svg>
 
         <div className="game__mistakes">
@@ -29,7 +36,13 @@ const QuestionGenre = (props) => {
 
       <section className="game__screen">
         <h2 className="game__title">Выберите {genre} треки</h2>
-        <form className="game__tracks">
+        <form
+          className="game__tracks"
+          onSubmit={(evt) => {
+            evt.preventDefault();
+            onAnswer(question, answers);
+          }}
+        >
           {answers.map((answer, i) => (
             <div key={`${i}-${answer.src}`} className="track">
               <button className="track__button track__button--play" type="button"/>
@@ -40,8 +53,10 @@ const QuestionGenre = (props) => {
               </div>
               <div className="game__answer">
                 <input className="game__input visually-hidden" type="checkbox" name="answer" value={`answer-${i}`}
-
-
+                  key={i}
+                  id={`answer-${i}`}
+                  checked={userAnswers[i]}
+                  onChange={getAnswers}
                 />
                 <label className="game__check" htmlFor={`answer-${i}`}>Отметить</label>
               </div>
