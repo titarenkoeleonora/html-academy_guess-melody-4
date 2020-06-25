@@ -5,13 +5,13 @@ import {GameType} from "../../const";
 const QuestionGenre = (props) => {
   const {onAnswer, question} = props;
   const {genre} = question;
-  const userAnswers = [false, false, false, false];
-  const [answers, setAnswers] = useState(userAnswers);
+  const [answers, setAnswers] = useState([false, false, false, false]);
 
   const getAnswers = (evt, i) => {
     const value = evt.target.checked;
 
-    setAnswers([...userAnswers.slice(0, i), value, ...userAnswers.slice(i + 1)]);
+
+    setAnswers([...answers.slice(0, i), value, ...answers.slice(i + 1)]);
   };
 
   return (
@@ -53,10 +53,9 @@ const QuestionGenre = (props) => {
               </div>
               <div className="game__answer">
                 <input className="game__input visually-hidden" type="checkbox" name="answer" value={`answer-${i}`}
-                  key={i}
                   id={`answer-${i}`}
-                  checked={userAnswers[i]}
-                  onChange={getAnswers}
+                  onChange={((evt) => getAnswers(evt, i))}
+                  checked={answers[i]}
                 />
                 <label className="game__check" htmlFor={`answer-${i}`}>Отметить</label>
               </div>
