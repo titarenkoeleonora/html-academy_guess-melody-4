@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import PropTypes from "prop-types";
 import {GameType} from "../../const";
+import AudioPlayer from "../audio-player/audio-player.jsx";
 
 const QuestionGenre = (props) => {
   const {onAnswer, question} = props;
@@ -26,12 +27,11 @@ const QuestionGenre = (props) => {
       >
         {answers.map((answer, i) => (
           <div key={`${i}-${answer.src}`} className="track">
-            <button className="track__button track__button--play" type="button"/>
-            <div className="track__status">
-              <audio
-                src={answer.src}
-              />
-            </div>
+            <AudioPlayer
+              src={question.answers[i].src}
+              isPlay={i === 0}
+
+            />
             <div className="game__answer">
               <input className="game__input visually-hidden" type="checkbox" name="answer" value={`answer-${i}`}
                 id={`answer-${i}`}
